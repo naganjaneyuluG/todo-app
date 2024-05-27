@@ -1,0 +1,53 @@
+
+name: cdk diff
+on:
+  push:
+
+jobs:
+  cdk-diff:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: checkout code from repo
+        uses: actions/checkout@v4
+
+      - name: Save npm cache
+        id: infra-cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: v1-infra-cache-npm-${{ hashFiles('package-lock.json') }}
+
+      - name: npm install
+        if: steps.infra-cache.outputs.cache-hit != 'true'
+        run: |
+          npm ci
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ap-south-1
+
+      - name: dev env cdk diff for v3.op3n.world , op3napp.com
+        run: |
+          npm run cdk -- diff \
+            dns \
+            hosted-zone-wildcard-certificate \
+            op3napp-dns-stack \
+            op3napp-wildcard-certificate \
+            ecr-repositories \
+            --context env=${{ inputs.ENV }}
+
+      - name: Store artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: cdk-out-${{ inputs.ENV }}
+          path: ./cdk.out
+          if-no-files-found: warn
+          retention-days: 30
+          compression-level: 6
+          overwrite: true

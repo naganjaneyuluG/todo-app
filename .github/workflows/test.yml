@@ -34,7 +34,7 @@ jobs:
 
       - name: dev env cdk diff for v3.op3n.world , op3napp.com
         run: |
-          npm run cdk -- diff \
+          npm run cdk -- diff ecr \
             --context env=prod
 
       - name: Store artifacts

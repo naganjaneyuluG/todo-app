@@ -18,16 +18,16 @@ import { SnAdminStack } from '../lib/stacks/sn-admin/sn-admin-stack'
     new Ecrstack(app, ECR_STACK_NAME, {
         env: getEnv(app, ECR_STACK_NAME),
         repositoryNames: [
-            "snadmin",
-            "snbackend"
+            "sn-admin",
+            "sn-backend",
         ]
     });
 
-    const SN_ADMIN_STACK_NAME = "snAdmin";
+    const SN_ADMIN_STACK_NAME = "sn-amin";
     new SnAdminStack(app, SN_ADMIN_STACK_NAME, {
         env: getEnv(app, SN_ADMIN_STACK_NAME),
 
-        image: app.node.tryGetContext(`stack-${SN_ADMIN_STACK_NAME}-image`) ?? "snadmin:latest",
+        image: app.node.tryGetContext(`stack-${SN_ADMIN_STACK_NAME}-image`) ?? "sn-admin:latest",
 
         cpu: config.snAdmin.cpu,
         memoryLimitMiB: config.snAdmin.memoryLimitMiB,

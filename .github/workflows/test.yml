@@ -29,18 +29,13 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-          aws-region: ap-south-1
+          role-to-assume: 'arn:aws:iam::891377034997:role/Github-OIDC'
+          aws-region: 'ap-south-1'
 
       - name: dev env cdk diff for v3.op3n.world , op3napp.com
         run: |
           npm run cdk -- diff \
-            dns \
-            hosted-zone-wildcard-certificate \
-            op3napp-dns-stack \
-            op3napp-wildcard-certificate \
-            ecr-repositories \
-            --context env=${{ inputs.ENV }}
+            --context env=prod
 
       - name: Store artifacts
         uses: actions/upload-artifact@v4

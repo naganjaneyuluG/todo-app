@@ -18,7 +18,8 @@ import { SnAdminStack } from '../lib/stacks/sn-admin/sn-admin-stack'
     new Ecrstack(app, ECR_STACK_NAME, {
         env: getEnv(app, ECR_STACK_NAME),
         repositoryNames: [
-            "opensuperappshop",
+            "snadmin",
+            "snbackend"
         ]
     });
 

@@ -1,0 +1,108 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f2f5;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 100%;
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.form {
+    display: flex;
+    margin-bottom: 1.5rem;
+}
+
+.form input[type="text"] {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form input[type="text"]:focus {
+    border-color: #1500ff;
+    outline: none;
+}
+
+.form button {
+    padding: 0.75rem 1.25rem;
+    border: none;
+    background-color: #007bff;
+    color: #ffffff;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+.form button:hover {
+    background-color: #0056b3;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+li:last-child {
+    border-bottom: none;
+}
+
+li.completed span {
+    text-decoration: line-through;
+    color: #ed0000;
+}
+
+.toggle-form {
+    margin: 0;
+    padding: 0;
+    margin-right: 1rem;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.toggle-form button {
+    background: none;
+    border: none;
+    color: #28a745;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.toggle-form button:hover {
+    color: #218838;
+}
+
+.toggle-form button.undo {
+    color: #dc3545;
+}
+
+.toggle-form button.undo:hover {
+    color: #c82333;
+}

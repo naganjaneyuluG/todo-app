@@ -1,0 +1,34 @@
+# Node.js dependencies
+node_modules
+
+# Logs
+*.log
+
+# Environment variables
+.env
+
+# Build directories
+dist
+build
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Dockerfile and related files
+Dockerfile
+docker-compose.yml
+
+# IDE/editor directories and files
+.vscode
+.idea
+*.swp
+
+# npm debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS-specific files
+*.sublime-workspace
+*.sublime-project

@@ -52,6 +52,10 @@ app.post('/toggle', async (req, res) => {
     res.redirect('/');
 });
 
+app.get('/notes', (req, res) => {
+    res.render('notes');
+});
+
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });

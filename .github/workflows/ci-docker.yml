@@ -47,5 +47,10 @@ jobs:
           severity: 'HIGH'
           format: template
           template: "@trivy/github-markdown.tpl"
-          output: ${{ github.step_summary }}
+          output: './trivy_report.md'  # Write to a temporary file
+      
+      - name: Add Trivy report to summary
+        if: always()
+        run: |
+          cat ./trivy_report.md >> $GITHUB_STEP_SUMMARY
 

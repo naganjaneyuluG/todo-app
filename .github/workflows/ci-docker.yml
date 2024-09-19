@@ -1,60 +1,29 @@
-name: Docker scout
+name: Container Image CI
 
-on:
-  push:
+on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-
     steps:
-      - name: Checkout repository
+      - name: Checkout Code
         uses: actions/checkout@v4
-      
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: "gudditi"
-          password: "dckr_pat_ndOtbSkfi-5qh4Io2SHgL55THhM"
 
-      # Build and push Docker image with Buildx (don't push on PR)
-      # https://github.com/docker/build-push-action
-      - name: Build 
-        run: docker build -t nodeapp:latest .
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
 
-      - name: Docker Scout
-        id: docker-scout
-        uses: docker/scout-action@v1
-        with:
-          command: quickview,cves,sbom
-          image: "nodeapp:latest"
-          ignore-unchanged: true
-          only-severities: critical,high
-          summary: true
-          write-comment: false
-      # Run Trivy vulnerability scanner and save output to file
-      - name: Run Trivy vulnerability scanner
-        id: trivy_scan
-        uses: aquasecurity/trivy-action@0.20.0
-        with:
-          image-ref: 'nodeapp:latest'
-          format: 'table'
-          exit-code: '0'
-          ignore-unfixed: false
-          vuln-type: 'os,library'
-          severity: 'HIGH'
-          output: './trivy-results.sarif' # Save Trivy output to a file
+      - name: Build the Container Image
+        run: docker build . --file Dockerfile --tag localbuild/testimage:latest
 
-      - name: Scan image
+      - name: Scan Image
         uses: anchore/scan-action@v3
+        id: scan
         with:
-          image: "nodeapp:latest"
-          fail-build: false
-          output-format: table
+          image: "localbuild/testimage:latest"
+          fail-build: true
+          output-format: sarif
 
-          
-          
+      - name: Upload Anchore Scan SARIF Report
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: ${{ steps.scan.outputs.sarif }}

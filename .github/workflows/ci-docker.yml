@@ -47,10 +47,10 @@ jobs:
           ignore-unfixed: false
           vuln-type: 'os,library'
           severity: 'HIGH'
-          output: './trivy_report.txt' # Save Trivy output to a file
+          output: './trivy-results.sarif' # Save Trivy output to a file
 
       # Append Trivy output to job summary
       - name: Add Trivy report to job summary
-        run: cat ./trivy_report.txt >> $GITHUB_STEP_SUMMARY
+        run: cat ./trivy-results.sarif >> $GITHUB_STEP_SUMMARY
           
           

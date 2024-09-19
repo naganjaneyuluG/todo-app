@@ -50,4 +50,4 @@ jobs:
           output: './trivy-report.html'
 
       - name: Add Trivy report to summary
-        run: cat ./trivy-report.html >> $GITHUB_STEP_SUMMARY
+        run: echo "$(cat ./trivy-report.html)" >> $GITHUB_STEP_SUMMARY

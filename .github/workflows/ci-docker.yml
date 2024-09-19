@@ -30,7 +30,7 @@ jobs:
         id: docker-scout
         uses: docker/scout-action@v1
         with:
-          command: cves,recommendations,sbom
+          command: quickview,cves,sbom
           image: "nodeapp:latest"
           ignore-unchanged: true
           only-severities: critical,high

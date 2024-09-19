@@ -40,7 +40,6 @@ jobs:
         id: trivy_scan
         uses: aquasecurity/trivy-action@0.20.0
         with:
-          input: oci
           image-ref: 'nodeapp:latest'
           exit-code: '0'
           ignore-unfixed: false
@@ -48,9 +47,5 @@ jobs:
           severity: 'HIGH'
           format: template
           template: "@trivy/github-markdown.tpl"
-          output: ${{ github.step_summary }}  # Directly outputting to step summary
+          output: ${{ github.step_summary }}
 
-      - name: Add Trivy report to summary
-        if: always()
-        run: | 
-          echo "Trivy report has been generated and is included in the summary."

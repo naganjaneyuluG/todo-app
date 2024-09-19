@@ -40,26 +40,19 @@ jobs:
         uses: aquasecurity/trivy-action@0.20.0
         with:
           image-ref: 'nodeapp:latest'
-          format: 'table'
           exit-code: '0'
           ignore-unfixed: false
           vuln-type: 'os,library'
           severity: 'HIGH'
-          output: './trivy-results.txt'
+          format: template
+          template: "@/contrib/html.tpl"
+          output: trivy-report.html
 
-      - name: Read Trivy output and format as markdown
-        run: |
-          echo "### Trivy Vulnerabilities Scan Report" >> $GITHUB_STEP_SUMMARY
-          echo "| Vulnerability | Package | Severity | Description |" >> $GITHUB_STEP_SUMMARY
-          echo "|---------------|---------|----------|-------------|" >> $GITHUB_STEP_SUMMARY
-          grep -A 4 -E "^Total Vulnerabilities:|^\w+ \[.*\]" ./trivy-results.txt | awk '{
-              if($1 ~ /^[a-zA-Z0-9]/) 
-                  printf("| %s | %s | %s | %s |\n", $1, $3, $NF, $0);
-          }' >> $GITHUB_STEP_SUMMARY
-
-      - name: Scan image
-        uses: anchore/scan-action@v3
+      - name: Upload Trivy report artifact
+        uses: actions/upload-artifact@v3
         with:
-          image: "nodeapp:latest"
-          fail-build: false
-          output-format: table
+          name: trivy-report
+          path: trivy-report.html
+
+      - name: Add Trivy report to summary
+        run: echo '### Vulnerability Report 📄\n\n[Trivy Report](./trivy-report.html)' >> $GITHUB_STEP_SUMMARY

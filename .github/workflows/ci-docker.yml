@@ -36,7 +36,9 @@ jobs:
           only-severities: critical,high
           summary: true
           write-comment: false
+      # Run Trivy vulnerability scanner and save output to file
       - name: Run Trivy vulnerability scanner
+        id: trivy_scan
         uses: aquasecurity/trivy-action@0.20.0
         with:
           image-ref: 'nodeapp:latest'
@@ -45,5 +47,10 @@ jobs:
           ignore-unfixed: false
           vuln-type: 'os,library'
           severity: 'HIGH'
+          output: './trivy_report.txt' # Save Trivy output to a file
+
+      # Append Trivy output to job summary
+      - name: Add Trivy report to job summary
+        run: cat ./trivy_report.txt >> $GITHUB_STEP_SUMMARY
           
           

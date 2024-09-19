@@ -46,17 +46,11 @@ jobs:
           vuln-type: 'os,library'
           severity: 'HIGH'
           format: template
-          template: "@/contrib/html.tpl"
-          output: './trivy-report.html'
+          template: "@trivy/github-markdown.tpl"
+          output: './trivy.md'
 
       - name: Add Trivy report to summary
-        run: |
-          echo "### Trivy Report Summary" >> $GITHUB_STEP_SUMMARY
-          echo "#### Alpine" >> $GITHUB_STEP_SUMMARY
-          grep -A 10 "Alpine" ./trivy-report.html >> $GITHUB_STEP_SUMMARY
-          echo "#### Vulnerabilities" >> $GITHUB_STEP_SUMMARY
-          grep -A 10 "Vulnerabilities" ./trivy-report.html >> $GITHUB_STEP_SUMMARY
-          echo "#### Misconfigurations" >> $GITHUB_STEP_SUMMARY
-          grep -A 10 "Misconfigurations" ./trivy-report.html >> $GITHUB_STEP_SUMMARY
-          echo "#### Node Packages" >> $GITHUB_STEP_SUMMARY
-          grep -A 10 "node-pkg" ./trivy-report.html >> $GITHUB_STEP_SUMMARY
+        if: always()
+        run: | 
+          cat ./trivy.md >> $GITHUB_STEP_SUMMARY
+        

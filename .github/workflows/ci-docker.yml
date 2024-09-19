@@ -49,8 +49,11 @@ jobs:
           severity: 'HIGH'
           output: './trivy-results.sarif' # Save Trivy output to a file
 
-      # Append Trivy output to job summary
-      - name: Add Trivy report to job summary
-        run: cat ./trivy-results.sarif >> $GITHUB_STEP_SUMMARY
+      - name: Scan image
+        uses: anchore/scan-action@v3
+        with:
+          image: "localbuild/testimage:latest"
+          fail-build: false
+          output-format: table
           
           

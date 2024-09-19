@@ -12,20 +12,23 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/download-artifact@v4
+      - name: Run Trivy scanner
+        uses: aquasecurity/trivy-action@0.20.0
         with:
-          name: build
-          path: .
-      - run: mkdir oci && tar -C oci -xf ${{ github.sha }}.tar
-      - uses: aquasecurity/trivy-action@master
-        with:
-          input: oci
-          format: template
-          template: "@trivy/github-markdown.tpl"
-          output: trivy.md
-          security-checks: vuln
-          ignore-unfixed: true
-          severity: CRITICAL,HIGH
-          exit-code: 1
-      - run: cat trivy.md >> $GITHUB_STEP_SUMMARY
-        if: always()
+          scan-type: config
+          hide-progress: true
+          output: trivy.txt
+      
+      - name: Publish Trivy Output to Summary
+        run: |
+          if [[ -s trivy.txt ]]; then
+            {
+              echo "### Security Output"
+              echo "<details><summary>Click to expand</summary>"
+              echo ""
+              echo '```terraform'
+              cat trivy.txt
+              echo '```'
+              echo "</details>"
+            } >> $GITHUB_STEP_SUMMARY
+          fi

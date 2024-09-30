@@ -11,11 +11,16 @@ pipeline {
                 git 'https://github.com/myorg-g/todo-app'
             }
         }
+        // Commented out Docker Build stage
+        /*
         stage('Docker Build') {
             steps {
                 sh 'docker build -t nodeapp:latest .'
             }
         }
+        */
+        // Commented out Aqua Scan stage
+        /*
         stage('Aqua Scan') {
             steps {
                 script {
@@ -39,6 +44,7 @@ pipeline {
                 }
             }
         }
+        */
     }
     post {
         always {

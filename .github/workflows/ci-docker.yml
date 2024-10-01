@@ -40,17 +40,10 @@ jobs:
       #     summary: true
       #     write-comment: false
 
-      # Step 5: Cache Trivy database to improve performance
-      - name: Cache Trivy DB
-        id: trivy-cache
-        uses: actions/cache@v4
-        with:
-          path: /tmp/.cache/trivy
-          key: ${{ runner.os }}-trivy-db-${{ github.sha }}
+
 
       # Step 6: Run Trivy vulnerability scanner only if cache is not hit
       - name: Run Trivy vulnerability scanner
-        if: steps.trivy-cache.outputs.cache-hit != 'true'
         id: trivy_scan
         uses: aquasecurity/trivy-action@0.20.0
         with:

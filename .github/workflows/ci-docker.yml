@@ -27,15 +27,9 @@ jobs:
       - name: Build Docker image
         run: docker build -t nodeapp:latest .
 
-      # Step 4: Cache Trivy vulnerability scanner results
-      - name: Cache Trivy results
-        uses: actions/cache@v4.0.2
-        with:
-          path: ${{ github.workspace }}/.cache/trivy
-          key: trivy-cache-${{ runner.os }}-${{ hashFiles('**/Dockerfile') }}
-          restore-keys: |
-            trivy-cache-${{ runner.os }}-
-            trivy-cache-
+      # Step 4: Create cache directory for Trivy
+      - name: Create Trivy cache directory
+        run: mkdir -p ${{ github.workspace }}/.cache/trivy
 
       # Step 5: Run Trivy vulnerability scanner with caching
       - name: Run Trivy vulnerability scanner
@@ -51,7 +45,17 @@ jobs:
           output: trivy.txt
           cache-dir: ${{ github.workspace }}/.cache/trivy # Use GitHub workspace for caching
 
-      # Step 6: Publish Trivy vulnerability scan report to the GitHub summary
+      # Step 6: Cache Trivy vulnerability scanner results
+      - name: Cache Trivy results
+        uses: actions/cache@v4.0.2
+        with:
+          path: ${{ github.workspace }}/.cache/trivy
+          key: trivy-cache-${{ runner.os }}-${{ hashFiles('**/Dockerfile') }}
+          restore-keys: |
+            trivy-cache-${{ runner.os }}-
+            trivy-cache-
+
+      # Step 7: Publish Trivy vulnerability scan report to the GitHub summary
       - name: Publish Trivy Output to Summary
         run: |
           if [[ -s trivy.txt ]]; then

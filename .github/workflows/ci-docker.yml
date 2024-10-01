@@ -34,7 +34,7 @@ jobs:
       # Step 5: Run Trivy vulnerability scanner with caching
       - name: Run Trivy vulnerability scanner
         id: trivy_scan
-        uses: aquasecurity/trivy-action@0.24.0
+        uses: aquasecurity/trivy-action@master
         env:
           TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2
 

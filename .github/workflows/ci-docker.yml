@@ -40,7 +40,7 @@ jobs:
       #     summary: true
       #     write-comment: false
 
-      # Step 5: Run Trivy vulnerability scanner only if cache is not hit
+      # Step 5: Run Trivy vulnerability scanner with caching
       - name: Run Trivy vulnerability scanner
         id: trivy_scan
         uses: aquasecurity/trivy-action@0.20.0
@@ -52,7 +52,7 @@ jobs:
           severity: 'HIGH'
           format: table
           output: trivy.txt
-          cache-dir: /tmp/.cache/trivy
+          cache-dir: ${{ github.workspace }}/.cache/trivy # Use GitHub workspace for caching
 
       # Step 6: Publish Trivy vulnerability scan report to the GitHub summary
       - name: Publish Trivy Output to Summary

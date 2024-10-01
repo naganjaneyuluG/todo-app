@@ -34,7 +34,7 @@ jobs:
       # Step 5: Run Trivy vulnerability scanner with caching
       - name: Run Trivy vulnerability scanner
         id: trivy_scan
-        uses: aquasecurity/trivy-action@0.20.0
+        uses: aquasecurity/trivy-action@0.24.0
         with:
           image-ref: 'nodeapp:latest'
           exit-code: '0'
@@ -43,17 +43,8 @@ jobs:
           severity: 'HIGH'
           format: table
           output: trivy.txt
-          cache-dir: ${{ github.workspace }}/.cache/trivy # Use GitHub workspace for caching
+         
 
-      # Step 6: Cache Trivy vulnerability scanner results
-      - name: Cache Trivy results
-        uses: actions/cache@v4.0.2
-        with:
-          path: ${{ github.workspace }}/.cache/trivy
-          key: trivy-cache-${{ runner.os }}-${{ hashFiles('**/Dockerfile') }}
-          restore-keys: |
-            trivy-cache-${{ runner.os }}-
-            trivy-cache-
 
       # Step 7: Publish Trivy vulnerability scan report to the GitHub summary
       - name: Publish Trivy Output to Summary

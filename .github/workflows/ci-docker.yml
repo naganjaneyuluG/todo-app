@@ -38,7 +38,7 @@ jobs:
 
       - name: Run Trivy vulnerability scanner
         id: trivy_scan
-        uses: aquasecurity/trivy-action@master 
+        uses: aquasecurity/trivy-action@0.24.0
         # aquasecurity/trivy-action@0.20.0
         with:
           image-ref: 'nodeapp:latest'

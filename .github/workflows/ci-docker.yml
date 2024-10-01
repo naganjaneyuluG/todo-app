@@ -40,9 +40,7 @@ jobs:
       #     summary: true
       #     write-comment: false
 
-
-
-      # Step 6: Run Trivy vulnerability scanner only if cache is not hit
+      # Step 5: Run Trivy vulnerability scanner only if cache is not hit
       - name: Run Trivy vulnerability scanner
         id: trivy_scan
         uses: aquasecurity/trivy-action@0.20.0
@@ -56,7 +54,7 @@ jobs:
           output: trivy.txt
           cache-dir: /tmp/.cache/trivy
 
-      # Step 7: Publish Trivy vulnerability scan report to the GitHub summary
+      # Step 6: Publish Trivy vulnerability scan report to the GitHub summary
       - name: Publish Trivy Output to Summary
         run: |
           if [[ -s trivy.txt ]]; then
@@ -64,7 +62,7 @@ jobs:
               echo "### Security Output"
               echo "<details><summary>Click to expand</summary>"
               echo ""
-              echo '```terraform'
+              echo '```plaintext'
               cat trivy.txt
               echo '```'
               echo "</details>"

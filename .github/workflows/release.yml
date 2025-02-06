@@ -1,0 +1,49 @@
+name: Release Version Tagger
+
+on:
+  push:
+    branches:
+      - master/*
+      - master
+
+jobs:
+  tag-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Node Version
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.18.0'
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.client_payload.branch }}
+
+      - name: Determine release name
+        id: vars
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.NPM_GITHUB_AUTH_TOKEN }}
+        run: |
+          git fetch --prune --unshallow --tags
+          DATE=$(date +%F)
+          SPRINT=$(git branch --show-current | sed 's/release\//v-/')
+          SPRINT_TAG=$(git tag | grep $SPRINT || :)
+
+          if [[ -z $SPRINT_TAG ]]
+          then
+            echo "tagging release $SPRINT-$DATE"
+          else
+            echo "release tag $SPRINT-$DATE already exists, moving tag."
+          fi
+
+          echo "::set-output name=release-version::$SPRINT-$DATE"
+
+      - name: Tag commit
+        uses: richardsimko/update-tag@v1
+        with:
+          tag_name: ${{ steps.vars.outputs.release-version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.NPM_GITHUB_AUTH_TOKEN }}
+        if: success()
